@@ -1,0 +1,14 @@
+class Solution {
+public:
+    vector<int> relativeSortArray(vector<int>& arr1, vector<int>& arr2) 
+    {
+        unordered_map<int, int> idxs;
+        int m = arr2.size();
+        for (int i = 0; i < m; ++i)
+            idxs[arr2[i]] = i - m;
+        sort(arr1.begin(), arr1.end(), [&](int x, int y) -> bool{
+            return (idxs.count(x) ? idxs[x] : x) < (idxs.count(y) ? idxs[y] : y);
+        });
+        return arr1;
+    }
+};

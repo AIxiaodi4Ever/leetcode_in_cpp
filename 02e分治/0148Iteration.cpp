@@ -1,0 +1,79 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) 
+    {
+        int length = 0;
+        ListNode* node = head;
+        while (node != nullptr)
+        {
+            ++length;
+            node=node->next;
+        }
+
+        ListNode* dummyHead = new ListNode(0, head);
+        for (int subLength = 1; subLength < length; subLength <<= 1)
+        {
+            ListNode* prev = dummyHead, *curr = dummyHead->next;
+            while (curr != nullptr)
+            {
+                ListNode *head1 = curr;
+                for (int i = 1; i < subLength && curr != nullptr && curr->next != nullptr; ++i)
+                    curr = curr->next;
+                ListNode* head2 = curr->next;
+                curr->next = nullptr;
+                curr = head2;
+                for (int i = 1; i < subLength && curr != nullptr && curr->next != nullptr; ++i)
+                    curr = curr->next;
+                ListNode* next = nullptr;
+                if (curr != nullptr)
+                {
+                    next = curr->next;
+                    curr->next = nullptr;
+                }
+                // code below critical, used to merge next two subList 
+                prev->next = merge(head1, head2);
+                while (prev->next != nullptr)
+                    prev = prev->next;
+                curr = next;
+            }
+        }
+        return dummyHead->next;
+    }
+
+    ListNode* merge(ListNode* left, ListNode *right)
+    {
+        ListNode *dummyHead = new ListNode(0);
+        ListNode *temp = dummyHead;
+        ListNode *temp1 = left, *temp2 = right;
+        while (temp1 != nullptr && temp2 != nullptr)
+        {
+            if (temp1->val <= temp2->val)
+            {
+                temp->next = temp1;
+                temp1 = temp1->next;
+            }
+            else
+            {
+                temp->next = temp2;
+                temp2 = temp2->next;
+            }
+            temp = temp->next;
+        }
+        // if not while...
+        if (temp1 != nullptr)
+            temp->next = temp1;
+        else if (temp2 != nullptr)
+            temp->next = temp2;
+        return dummyHead->next;
+    }
+};
