@@ -46,6 +46,8 @@
         "initializer_list": "cpp",
         "utility": "cpp",
         "*.tcc": "cpp",
-        "limits": "cpp"
+        "limits": "cpp",
+        "new": "cpp",
+        "ostream": "cpp"
     } // 效果效果比cpptools要好
 }
